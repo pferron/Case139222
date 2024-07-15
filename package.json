@@ -1,0 +1,97 @@
+{
+  "name": "@cof/wanda-aws-iam-assets",
+  "version": "1.113.0",
+  "private": true,
+  "bin": {
+    "getRoleNamesTypes.ts": "scripts/getRoleNamesTypes.ts"
+  },
+  "scripts": {
+    "better-audit": "better-npm-audit audit",
+    "dbsync:cft": "dbsync.sh db-migrate --migrations-dir `pwd`/migrations_cft --migration-table migrations_cft --js js --config database.js",
+    "dbsync:policy-names": "dbsync.sh db-migrate --migrations-dir `pwd`/migrations_policy_names --migration-table migrations_cft --js js --config database.js",
+    "dbsync:prod-version": "./scripts/getLatestCftVersion.js | xargs -I{} ./scripts/syncProdVersion.js --tag_version {}",
+    "dbsync:release": "npm run dbsync:cft -- up && npm run dbsync:policy-names -- up && npm run dbsync:prod-version",
+    "dbsync:reset-db-data": " ./scripts/js/resetDB.js",
+    "dbsync:roleType": "dbsync.sh db-migrate up --migrations-dir `pwd`/migrations_role_type_patterns --migration-table migrationsRoleTypePatterns --js js --config database.js",
+    "link:cfn-include": "npm link @cloud-iam/cfn-include && cd ./node_modules/@cloud-iam/cfn-include && npm install",
+    "lint": "eslint . --ext .js --ext .ts --ext .json",
+    "prepare": "sort-package-json",
+    "test": "npm run test:unit:js",
+    "test:unit:js": "jest --coverage \"$@\"",
+    "unused:dependencies": "depcheck --ignore-bin-package --ignores @types/jest,jsonc-eslint-parser,@cof/cloud-iam-anvil,proxy-agent"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.614.0",
+    "@aws-sdk/util-arn-parser": "3.568.0",
+    "@cof/cloud-iam-cfn-include": "2.4.4",
+    "@cof/cloud-iam-db-migrations": "0.1.0",
+    "@znemz/sort-object": "3.0.4",
+    "aws-sdk-v3-proxy": "2.1.4",
+    "deasync": "0.1.30",
+    "debug-fabulous": "2.0.2",
+    "eslint-plugin-import": "2.29",
+    "file-compare": "0.0.1",
+    "globby": "11.1.0",
+    "jsonrepair": "2.2.1",
+    "lodash": "4.17.21",
+    "proxy-agent": "6.4.0",
+    "replacestream": "4.0.3",
+    "rexreplace": "7.1.3",
+    "split": "1.0.1",
+    "strftime": "0.10.3",
+    "tmp": "0.2.1"
+  },
+  "devDependencies": {
+    "@cof/cloud-iam-conventional-versioning": "0.2.16",
+    "@cof/eslint-config": "6.0.2",
+    "@sjmeverett/cloudformation-types": "2.7.0",
+    "@types/bluebird": "3.5.42",
+    "@types/deasync": "0.1.5",
+    "@types/globby": "9.1.0",
+    "@types/jest": "27.5.2",
+    "@types/lodash": "4.14",
+    "@types/node": "20.14.9",
+    "@types/through2": "2.0.41",
+    "@types/tmp": "0.2.6",
+    "@typescript-eslint/eslint-plugin": "5",
+    "@typescript-eslint/parser": "5",
+    "@znemz/json-parse": "1.1.0",
+    "better-npm-audit": "3.7.3",
+    "bluebird": "3.7.2",
+    "depcheck": "1.4.7",
+    "eslint": "8",
+    "eslint-config-prettier": "9",
+    "eslint-import-resolver-typescript": "3.6.1",
+    "eslint-plugin-jest": "27.6.3",
+    "eslint-plugin-jsonc": "2.16.0",
+    "eslint-plugin-prettier": "5",
+    "fs-extra": "11.2.0",
+    "isomorphic-git": "1.27.1",
+    "jest": "27.5.1",
+    "jest-cli": "29.7.0",
+    "jest-extended": "4.0",
+    "prettier": "3",
+    "sort-package-json": "2.10.0",
+    "spawn-please": "2.0",
+    "stream-to-promise": "3.0.0",
+    "through2": "4.0.2",
+    "ts-jest": "27.1.5",
+    "ts-node": "10.9.2",
+    "type-fest": "4.20.1",
+    "typescript": "4.9.5",
+    "yargs": "17.7.2"
+  },
+  "engines": {
+    "npm": ">=8"
+  },
+  "overrides": {
+    "socks-proxy-agent": "8.0.4",
+    "pac-resolver": "7.0.1",
+    "socks": "2.8.3"
+  },
+  "standard-version": {
+    "scripts": {
+      "prerelease": "git add migrations_cft migrations_role_type_patterns"
+    }
+  }
+}
